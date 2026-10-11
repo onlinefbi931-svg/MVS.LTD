@@ -1,0 +1,37 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/api/config",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "MPESA_CONSUMER_KEY",
+      "description": "Safaricom Daraja consumer key. Get it at developer.safaricom.co.ke → Apps → your app → Keys.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "MPESA_CONSUMER_SECRET",
+      "description": "Safaricom Daraja consumer secret (same Keys page as the consumer key).",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "MPESA_SHORTCODE",
+      "description": "Business shortcode (Paybill or Till number) used for Lipa Na M-Pesa Online.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "MPESA_PASSKEY",
+      "description": "Lipa Na M-Pesa Online passkey issued for that shortcode.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "MPESA_ENV",
+      "description": "Either sandbox or production. Defaults to sandbox when unset.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "MPESA_CALLBACK_URL",
+      "description": "Optional public HTTPS callback URL. Leave unset to use the preview URL automatically.",
+      "requiredAtBoot": false
+    }
+  ]
+}

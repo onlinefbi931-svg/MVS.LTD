@@ -1,0 +1,47 @@
+# Base44 development compose file.
+#
+# Runs the app straight from the cloned source (plain node:22 image, repo bind
+# mounted) with Node's watch mode, so edits appear in the preview without
+# rebuilding anything. Start it with:
+#   docker compose -f docker-compose.base44.yml up -d
+services:
+  web:
+    image: node:22
+    working_dir: /app
+    # Installs from the committed lockfile once the bind mount and the
+    # node_modules volume are in place, then starts the live-reloading dev server.
+    command: ["sh", "-ec", "npm ci --no-audit --no-fund && exec npm run dev"]
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      - web_node_modules:/app/node_modules
+    env_file:
+      # Local placeholders first: the app boots with no credentials at all.
+      - path: ./.env.base44-defaults
+      # Platform-managed secrets last, so values from the dashboard always win.
+      - path: /run/base44/app.env
+        required: false
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      # Passed through from the sandbox so the server can derive its public
+      # callback URL (https://3000-<suffix>/api/mpesa/callback).
+      - BASE44_PREVIEW_MODE
+      - BASE44_PUBLIC_HOST_SUFFIX
+    restart: on-failure
+    healthcheck:
+      # Uses the app's existing read-only config endpoint.
+      test:
+        - CMD-SHELL
+        - >-
+          node -e "fetch('http://127.0.0.1:3000/api/config')
+          .then((r) => process.exit(r.ok ? 0 : 1))
+          .catch(() => process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 40s
+
+volumes:
+  web_node_modules:

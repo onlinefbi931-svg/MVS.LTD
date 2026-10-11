@@ -1,0 +1,17 @@
+{
+  "name": "mvs-ltd-stk-push",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MVS.LTD — Safaricom M-Pesa STK Push (Lipa Na M-Pesa Online) payment prompt app",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

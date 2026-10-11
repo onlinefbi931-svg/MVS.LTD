@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MVS.LTD — M-Pesa STK Push</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">MVS</span>
+        <div>
+          <h1>M-Pesa STK Push</h1>
+          <p class="brand-sub">Send a payment prompt to a customer&rsquo;s phone</p>
+        </div>
+      </div>
+      <span id="env-badge" class="badge">loading…</span>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <h2>New payment prompt</h2>
+        <p id="config-warning" class="warning" hidden></p>
+
+        <form id="push-form" novalidate>
+          <label for="phone">Customer phone number</label>
+          <input id="phone" name="phone" inputmode="tel" autocomplete="off" placeholder="0712345678" required />
+
+          <label for="amount">Amount (KES)</label>
+          <input id="amount" name="amount" type="number" min="1" max="250000" step="1" value="1" required />
+
+          <label for="reference">Account reference</label>
+          <input id="reference" name="reference" maxlength="12" placeholder="MVS.LTD" />
+
+          <label for="description">Description</label>
+          <input id="description" name="description" maxlength="13" placeholder="Payment" />
+
+          <button id="submit" type="submit">Send prompt</button>
+        </form>
+
+        <p id="form-message" class="form-message" hidden></p>
+        <p class="hint">Test numbers in the Safaricom sandbox: 254708374149 prompts successfully.</p>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>Transactions</h2>
+          <button id="refresh" class="ghost" type="button">Refresh</button>
+        </div>
+        <ul id="transactions" class="txn-list">
+          <li class="empty">No prompts sent yet.</li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
