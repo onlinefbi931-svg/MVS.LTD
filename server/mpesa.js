@@ -120,10 +120,14 @@ async function callSafaricom(url, options) {
   }
 
   if (!response.ok) {
+    const raw = typeof body?.raw === 'string' ? body.raw : '';
+    // Safaricom's edge protection answers with an HTML challenge page; never
+    // surface that markup to the user.
+    const blocked = /^\s*</.test(raw);
     const message =
       body?.errorMessage ||
       body?.ResponseDescription ||
-      body?.raw ||
+      (blocked ? `Safaricom rejected the request (HTTP ${response.status}).` : raw) ||
       `Safaricom returned HTTP ${response.status}`;
     throw new Error(String(message).slice(0, 300));
   }

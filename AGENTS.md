@@ -47,3 +47,16 @@ without a rebuild; frontend files are read from disk per request.
    — must return `{"ResultCode":0,"ResultDesc":"Accepted"}`.
 
 Safaricom's sandbox test number for a prompt that succeeds is `254708374149`.
+
+### Known obstacle: Safaricom edge protection blocks the prompt POST from cloud IPs
+
+Verified from the Base44 sandbox with valid sandbox credentials: the OAuth call
+succeeds (HTTP 200, token returned) while the STK Push POST to
+`/mpesa/stkpush/v1/processrequest` is answered by Safaricom's Imperva/Incapsula
+edge with **HTTP 403** (an HTML challenge page) or simply stalls past the client
+timeout. The app surfaces this as `Safaricom rejected the request (HTTP 403).` /
+`Safaricom did not respond in time.`
+
+This is an egress-IP block on Safaricom's side, not a credentials or code
+problem: the same request from an ordinary/allowlisted network reaches Daraja.
+Do not "fix" it by loosening timeouts or retrying in a loop.
